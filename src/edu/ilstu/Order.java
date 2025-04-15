@@ -34,7 +34,7 @@ public class Order {
 	
 	public String toString() {
 		// should be called after the order has been fulfilled for the purpose of displaying the order total
-		
+		return "";
 	}
 	
 	
