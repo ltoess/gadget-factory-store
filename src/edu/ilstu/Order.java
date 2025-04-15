@@ -27,7 +27,7 @@ public class Order {
 		// should be called if the current order is being processed and the store has enough gadgets to cover the order 
 	}
 	
-	public String getOrder() {]
+	public String getOrder() {
 		// returns the order information, including order number and the number of gadgets the order required
 		return "Order Number: " + orderNumber + " # of gadgets: " + gadgets; 
 	}
