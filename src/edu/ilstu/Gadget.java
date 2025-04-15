@@ -1,5 +1,5 @@
 package edu.ilstu;
-
+ 
 public class Gadget {
 
 	private int price; 
@@ -7,7 +7,7 @@ public class Gadget {
 	
 	
 	public Gadget(int materialPrice) {
-		this.price = price;
+		this.price = materialPrice;
 	}
 	
 	public int getPrice() {
