@@ -70,7 +70,16 @@ public class GadgetFactoryStore {
 				orderQueue.offer(newOrder);
 				System.out.println("\nNot enough gadgets for the order, saving it for future deliveries.");
 			} else {
-				// put fulfill order method here get it working right with the parameters
+				List<Gadget> stockForOrder = new ArrayList<>();
+				while (stockForOrder.size() < newOrder.getGadgets()) {
+					List<Gadget> pulls = stock.pop();
+					for (Gadget g : pulls) {
+						stockForOrder.add(g);
+						
+					}
+					
+				}
+				
 			}
 
 			
