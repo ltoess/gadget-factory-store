@@ -1,58 +1,83 @@
 package edu.ilstu;
 
 import java.time.LocalDate;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Random;
-import java.util.Stack;
+
 
 public class GadgetFactoryStore {
 	// driver class 
 	
 	public static void main(String[] args) {
+		
+		// object instantiation
 		LocalDate date = LocalDate.of(2025, 4, 1);
 		Random rand = new Random();
+		Deque<List<Gadget>> stock = new ArrayDeque<>();
+		Deque<Order> orderQueue = new ArrayDeque<>();
 		
-		System.out.println("			Welcome to the Gadget Factory Store Simulation System");
-		Stack<List<Gadget>> batches = new Stack<>();
-		Stack<Gadget> stock = new Stack<>();
-	
-		int currentMonth = 0; 
-		int lastMonth = 0; 
+		// variable instantiation 
+		int currentMonth = 0, lastMonth = 0; 
+		int materialPrice = 12, updatedPrice;
+		int stockQty = 0;
 		boolean newMonth = false; 
-		int materialPrice = 12;
-		int updatedPrice; 
 		
-		for (int i = 0; i < 100; i++ ) {	
-			System.out.println("Today's date: " + date.toString() + newMonth + " " + materialPrice);
-			
-			
-			// changes materialPrice depending on a new month. fluctuates between 10 & 15 monthly, starts at 12
+		
+		// modifiable variables
+		int simulationRuntime = 100; // runtime of simulation, in days 
+		int batchSize = 5; // max number of gadgets that each batch will hold 
+		int numOfBatches = 2; // max number of batches to be produced in one day
+		
+		
+		// start of simulation  
+		System.out.println("            Welcome to the Gadget Factory Store Simulation System");
+		for (int day = 0; day < simulationRuntime; day++ ) {	
+			// preliminary calculations 
+			// immediately make two batches for the day 			
+			for (int batchNum = 0; batchNum < numOfBatches; batchNum++) {
+				List<Gadget> batch = new ArrayList<>();
+				for (int gadgetNum = 0; gadgetNum < batchSize; gadgetNum++) {
+					Gadget gad = new Gadget(materialPrice);
+					batch.add(gad);
+				}
+				stock.push(batch);
+			}
+			stockQty = countStock(stock); 
+			// and check to see if month changed. if changed, update materialPrice
 			if (newMonth) {
 				updatedPrice = rand.nextInt(10,16);
 				while(updatedPrice == materialPrice) {
 					updatedPrice = rand.nextInt(10,16);
 				}
 				materialPrice = updatedPrice; 
-			}
+			}		
 			
-		
-			int numGadgets = rand.nextInt(1,31); // [1,30]
+			// print out start-of-day header 
+			System.out.println("Date: " + date.toString());
+			System.out.println("Gadgets in stock: " + stockQty);
+			System.out.println("New order: ");
+			
+			// create new order for the day 
+			int numGadgets = rand.nextInt(1,31);
 			Order newOrder = new Order(numGadgets, date);
+			System.out.println(newOrder.getOrder());
+			
+			
+			if (newOrder.getGadgets() > stockQty) {
+				orderQueue.offer(newOrder);
+				System.out.println("\nNot enough gadgets for the order, saving it for future deliveries.");
+			} else {
+				// put fulfill order method here get it working right with the parameters
+			}
 
 			
-			// making two batches
-			List<Gadget> batch = new ArrayList<>();
-			for (int batchNum = 0; batchNum < 2; batchNum++) {
-				for (int j = 0; j < 5; j++) {
-					Gadget gad = new Gadget(materialPrice);
-					batch.add(gad);
-				}
-				
-			}
-			batches.push(batch);
 						
 			
+			
+			// date incrementing and determining when the month changes 
 			lastMonth = date.getMonthValue();
 			date = date.plusDays(1);
 			currentMonth = date.getMonthValue();
@@ -60,18 +85,28 @@ public class GadgetFactoryStore {
 				newMonth = true; 
 			else 
 				newMonth = false; 
-			
+			System.out.println();
 		}
 		
 		
 		
-
 		
 		
 		
 		
 		
 		
+	}
+	
+	
+	
+	// extra method to count stock numbers 
+	public static int countStock(Deque<List<Gadget>> stock) {
+		int stockQty = 0; 
+		for (List<Gadget> list : stock) {
+			stockQty += list.size();
+		}
+		return stockQty; 
 	}
 
 }
