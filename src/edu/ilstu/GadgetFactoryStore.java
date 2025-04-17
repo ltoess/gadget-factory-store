@@ -18,6 +18,7 @@ public class GadgetFactoryStore {
 		Random rand = new Random();
 		Deque<List<Gadget>> warehouse = new ArrayDeque<>();
 		Deque<Order> waitlist = new ArrayDeque<>();
+		Deque<Order> returnElgigble = new ArrayDeque<>();
 		
 		// variable instantiation 
 		int currentMonth = 0, lastMonth = 0; 
@@ -65,25 +66,48 @@ public class GadgetFactoryStore {
 			Order newOrder = new Order(numGadgets, date);
 			System.out.println(newOrder.getOrder());
 			
+			List<Gadget> stockForOrder = new ArrayList<>();
 			
-			if (newOrder.getGadgets() > stockQty) {
+			if (stockQty < newOrder.getGadgets()) {
+				System.out.println("Not enough gadgets for the order, saving it for future deliveries.");
 				waitlist.offer(newOrder);
-				System.out.println("\nNot enough gadgets for the order, saving it for future deliveries.");
 			} else {
-				List<Gadget> stockForOrder = new ArrayList<>();
-				while (stockForOrder.size() < newOrder.getGadgets()) {
-					List<Gadget> pulls = warehouse.pop();
-					for (Gadget g : pulls) {
+				while(stockForOrder.size() < newOrder.getGadgets()) {
+				List<Gadget> pulls = new ArrayList<>();
+				pulls = warehouse.pop();
+				for (Gadget g : pulls) {
+					if (stockForOrder.size() < newOrder.getGadgets()) {
 						stockForOrder.add(g);
-						
+					} else {
+						break;
 					}
+				}
+				
+				if (stockForOrder.size() == newOrder.getGadgets() && pulls.size() > (newOrder.getGadgets() - stockForOrder.size())) {
+					List<Gadget> extraGadgets = new ArrayList<>();
+					int difference = newOrder.getGadgets() - stockForOrder.size();
+					for (int i = 0; i < difference; i++) {
+						extraGadgets.add(pulls.get(i));
+					}
+					warehouse.push(extraGadgets);
+				}	
 					
 				}
 				
 			}
-
 			
-						
+			
+			if(waitlist.size() >= 3) {
+				System.out.println("proccessing waitlist orders");
+			} else {
+				newOrder.fulfillOrder(stockForOrder);
+			}
+			
+			
+			
+			
+			
+			
 			
 			
 			// date incrementing and determining when the month changes 
@@ -96,13 +120,8 @@ public class GadgetFactoryStore {
 				newMonth = false; 
 			System.out.println();
 		}
-		
-		
-		
-		
-		
-		
-		
+
+			
 		
 		
 	}
