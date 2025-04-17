@@ -104,6 +104,8 @@ public class GadgetFactoryStore {
 			}
 			
 			
+			// make flags for regular production and waitlist production, flip to determine output for the day 
+			
 			
 			
 			
