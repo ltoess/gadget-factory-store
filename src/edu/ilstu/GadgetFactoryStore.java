@@ -76,7 +76,7 @@ public class GadgetFactoryStore {
 					
 				// if stock is available, fulfill waitlist order
 				} else { 
-					Order oldOrder = waitlist.remove();
+					Order oldOrder = waitlist.poll();
 					List<Gadget> stockForOrder = new ArrayList<>();
 					while(stockForOrder.size() < oldOrder.getGadgets()) {
 						List<Gadget> pulls = new ArrayList<>();
@@ -102,7 +102,7 @@ public class GadgetFactoryStore {
 					if (returnEligible.size() < 3)	{				
 						returnEligible.offer(oldOrder);
 					} else {
-						returnEligible.remove();
+						returnEligible.poll();
 						returnEligible.offer(oldOrder);
 					}
 					
@@ -119,6 +119,41 @@ public class GadgetFactoryStore {
 				Order newOrder = new Order(numGadgets, date);
 				System.out.println(newOrder.getOrder());
 				
+				List<Gadget> stockForOrder = new ArrayList<>();
+				while(stockForOrder.size() < newOrder.getGadgets()) {
+					 if (warehouse.isEmpty()) {
+					        System.out.println("Error: warehouse ran out of batches unexpectedly.");
+					        waitlist.offer(newOrder);
+					        break; 
+					    }
+					
+					
+					List<Gadget> pulls = new ArrayList<>();
+					pulls = warehouse.pop();
+					for (Gadget g : pulls) {
+						if (stockForOrder.size() < newOrder.getGadgets()) {
+							stockForOrder.add(g);
+						} else {
+							break;
+						}
+					}
+					
+					if (stockForOrder.size() == newOrder.getGadgets() && pulls.size() > (newOrder.getGadgets() - stockForOrder.size())) {
+						List<Gadget> extraGadgets = new ArrayList<>();
+						int difference = newOrder.getGadgets() - stockForOrder.size();
+						for (int i = 0; i < difference; i++) {
+							extraGadgets.add(pulls.get(i));
+						}
+						warehouse.push(extraGadgets);
+					}		
+				}
+				
+				if (returnEligible.size() < 3)	{				
+					returnEligible.offer(newOrder);
+				} else {
+					returnEligible.poll();
+					returnEligible.offer(newOrder);
+				}
 				
 				
 
