@@ -16,8 +16,8 @@ public class GadgetFactoryStore {
 		// object instantiation
 		LocalDate date = LocalDate.of(2025, 4, 1);
 		Random rand = new Random();
-		Deque<List<Gadget>> stock = new ArrayDeque<>();
-		Deque<Order> orderQueue = new ArrayDeque<>();
+		Deque<List<Gadget>> warehouse = new ArrayDeque<>();
+		Deque<Order> waitlist = new ArrayDeque<>();
 		
 		// variable instantiation 
 		int currentMonth = 0, lastMonth = 0; 
@@ -43,9 +43,9 @@ public class GadgetFactoryStore {
 					Gadget gad = new Gadget(materialPrice);
 					batch.add(gad);
 				}
-				stock.push(batch);
+				warehouse.push(batch);
 			}
-			stockQty = countStock(stock); 
+			stockQty = countStock(warehouse); 
 			// and check to see if month changed. if changed, update materialPrice
 			if (newMonth) {
 				updatedPrice = rand.nextInt(10,16);
@@ -67,12 +67,12 @@ public class GadgetFactoryStore {
 			
 			
 			if (newOrder.getGadgets() > stockQty) {
-				orderQueue.offer(newOrder);
+				waitlist.offer(newOrder);
 				System.out.println("\nNot enough gadgets for the order, saving it for future deliveries.");
 			} else {
 				List<Gadget> stockForOrder = new ArrayList<>();
 				while (stockForOrder.size() < newOrder.getGadgets()) {
-					List<Gadget> pulls = stock.pop();
+					List<Gadget> pulls = warehouse.pop();
 					for (Gadget g : pulls) {
 						stockForOrder.add(g);
 						
