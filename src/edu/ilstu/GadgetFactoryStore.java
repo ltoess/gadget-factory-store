@@ -11,7 +11,192 @@ import java.util.Random;
 public class GadgetFactoryStore {
 	// driver class 
 	
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
+//		
+//		// object instantiation
+//		LocalDate date = LocalDate.of(2025, 4, 1);
+//		Random rand = new Random();
+//		Deque<List<Gadget>> warehouse = new ArrayDeque<>();
+//		Deque<Order> waitlist = new ArrayDeque<>();
+//		Deque<Order> returnEligible = new ArrayDeque<>();
+//		
+//		// variable instantiation 
+//		int currentMonth = 0, lastMonth = 0; 
+//		int materialPrice = 12, updatedPrice;
+//		int stockQty = 0;
+//		boolean newMonth = false; 
+//		boolean waitlistMode = false; 
+//		
+//		
+//		// modifiable variables
+//		final int SIMULATION_RUNTIME = 100; // runtime of simulation, in days 
+//		final int BATCH_SIZE = 5; // max number of gadgets that each batch will hold 
+//		final int NUM_OF_BATCHES = 2; // max number of batches to be produced in one day
+//		
+//		
+//		// start of simulation  
+//		System.out.println("            Welcome to the Gadget Factory Store Simulation System");
+//		for (int day = 0; day < SIMULATION_RUNTIME; day++ ) {
+//			
+//			// preliminary calculations 
+//			// immediately make two batches for the day 			
+//			for (int batchNum = 0; batchNum < NUM_OF_BATCHES; batchNum++) {
+//				List<Gadget> batch = new ArrayList<>();
+//				for (int gadgetNum = 0; gadgetNum < BATCH_SIZE; gadgetNum++) {
+//					Gadget gad = new Gadget(materialPrice);
+//					batch.add(gad);
+//				}
+//				warehouse.push(batch);
+//			}		
+//			// and check to see if month changed. if changed, update materialPrice
+//			if (newMonth) {
+//				updatedPrice = rand.nextInt(10,16);
+//				while(updatedPrice == materialPrice) {
+//					updatedPrice = rand.nextInt(10,16);
+//				}
+//				materialPrice = updatedPrice; 
+//			}	
+//			
+//			
+//			
+//			
+//			// print out start-of-day header 	
+//			stockQty = countStock(warehouse); 
+//			System.out.println("Date: " + date.toString());
+//			System.out.println("Gadgets in stock: " + stockQty);
+//			
+//			
+//			// BEGINNING OF ORDER PROCESSING
+//			// start with case where waitlist is full 
+//			
+//			if (waitlistMode && !waitlist.isEmpty()) {
+//				// first, check to make sure stock is available for waitlist order. if not, skip to tomorrow to try again 
+//				if (stockQty < waitlist.peek().getGadgets()) { 
+//					System.out.println("Not enough gadgets for the waitlist order, check stock tomorrow.");
+//					
+//				// if stock is available, fulfill waitlist order
+//				} else { 
+//					Order oldOrder = waitlist.poll();
+//					List<Gadget> stockForOrder = new ArrayList<>();
+//					while(stockForOrder.size() < oldOrder.getGadgets()) {
+//						List<Gadget> pulls = new ArrayList<>();
+//						pulls = warehouse.pop();
+//						for (Gadget g : pulls) {
+//							if (stockForOrder.size() < oldOrder.getGadgets()) {
+//								stockForOrder.add(g);
+//							} else {
+//								break;
+//							}
+//						}
+//						
+//						if (stockForOrder.size() == oldOrder.getGadgets() && pulls.size() > (oldOrder.getGadgets() - stockForOrder.size())) {
+//							List<Gadget> extraGadgets = new ArrayList<>();
+//							int difference = oldOrder.getGadgets() - stockForOrder.size();
+//							for (int i = 0; i < difference; i++) 
+//								extraGadgets.add(pulls.get(i));
+//							warehouse.push(extraGadgets);
+//						}		
+//					}
+//					
+//					if (returnEligible.size() < 3)	{				
+//						returnEligible.offer(oldOrder);
+//					} else {
+//						returnEligible.poll();
+//						returnEligible.offer(oldOrder);
+//					}
+//					// ADD RETURNELIGIBLE LOGIC TO ALL PRODUCTION ALGORITHMS					
+//				}	
+//			}
+//			
+//			
+//			
+//			
+//			if(waitlist.size() >= 3) {
+//				System.out.println("proccessing waitlist orders");
+//				waitlistMode = true;
+//				
+//			} else {
+//				System.out.println("New order: ");
+//				
+//				// create new order for the day 
+//				int numGadgets = rand.nextInt(1,31);
+//				Order newOrder = new Order(numGadgets, date);
+//				System.out.println(newOrder.getOrder());
+//				
+//				if (stockQty < newOrder.getGadgets()) {
+//					System.out.println("Not enough gadgets for the order, saving it for future deliveries.");
+//					waitlist.offer(newOrder);	
+//				} else {
+//					List<Gadget> stockForOrder = new ArrayList<>();
+//					while(stockForOrder.size() < newOrder.getGadgets()) {					
+//						
+//						List<Gadget> pulls = new ArrayList<>();
+//						pulls = warehouse.pop();
+//						for (Gadget g : pulls) {
+//							if (stockForOrder.size() < newOrder.getGadgets()) {
+//								stockForOrder.add(g);
+//							} else {
+//								break;
+//							}
+//						}
+//						
+//						if (stockForOrder.size() == newOrder.getGadgets() && pulls.size() > (newOrder.getGadgets() - stockForOrder.size())) {
+//							List<Gadget> extraGadgets = new ArrayList<>();
+//							int difference = newOrder.getGadgets() - stockForOrder.size();
+//							for (int i = 0; i < difference; i++) {
+//								extraGadgets.add(pulls.get(i));
+//							}
+//							warehouse.push(extraGadgets);
+//						}		
+//					}
+//					
+//					if (returnEligible.size() < 3)	{				
+//						returnEligible.offer(newOrder);
+//					} else {
+//						returnEligible.poll();
+//						returnEligible.offer(newOrder);
+//					}
+//				}
+//				
+//				
+//				
+//				
+//
+//			}
+//				
+//				
+//
+//			
+//			// make flags for regular production and waitlist production, flip to determine output for the day 
+//			
+//			
+//			
+//			// date incrementing and determining when the month changes 
+//			lastMonth = date.getMonthValue();
+//			date = date.plusDays(1);
+//			currentMonth = date.getMonthValue();
+//			if (lastMonth != currentMonth) 
+//				newMonth = true; 
+//			else 
+//				newMonth = false; 
+//			System.out.println();
+//			
+//			
+//		}
+//
+//			
+//		
+//		
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+public static void main(String[] args) {
 		
 		// object instantiation
 		LocalDate date = LocalDate.of(2025, 4, 1);
@@ -23,31 +208,30 @@ public class GadgetFactoryStore {
 		// variable instantiation 
 		int currentMonth = 0, lastMonth = 0; 
 		int materialPrice = 12, updatedPrice;
-		int stockQty = 0;
 		boolean newMonth = false; 
+		boolean takingOrders = false; 
 		
 		
 		// modifiable variables
-		int simulationRuntime = 100; // runtime of simulation, in days 
-		int batchSize = 5; // max number of gadgets that each batch will hold 
-		int numOfBatches = 2; // max number of batches to be produced in one day
+		final int SIMULATION_RUNTIME = 100; // runtime of simulation, in days 
+		final int BATCH_SIZE = 5; // max number of gadgets that each batch will hold 
+		final int NUM_OF_BATCHES = 2; // max number of batches to be produced in one day
 		
 		
 		// start of simulation  
 		System.out.println("            Welcome to the Gadget Factory Store Simulation System");
-		for (int day = 0; day < simulationRuntime; day++ ) {
+		for (int day = 0; day < SIMULATION_RUNTIME; day++ ) {
 			
 			// preliminary calculations 
 			// immediately make two batches for the day 			
-			for (int batchNum = 0; batchNum < numOfBatches; batchNum++) {
+			for (int batchNum = 0; batchNum < NUM_OF_BATCHES; batchNum++) {
 				List<Gadget> batch = new ArrayList<>();
-				for (int gadgetNum = 0; gadgetNum < batchSize; gadgetNum++) {
+				for (int gadgetNum = 0; gadgetNum < BATCH_SIZE; gadgetNum++) {
 					Gadget gad = new Gadget(materialPrice);
 					batch.add(gad);
 				}
 				warehouse.push(batch);
-			}
-			
+			}		
 			// and check to see if month changed. if changed, update materialPrice
 			if (newMonth) {
 				updatedPrice = rand.nextInt(10,16);
@@ -57,61 +241,16 @@ public class GadgetFactoryStore {
 				materialPrice = updatedPrice; 
 			}	
 			
-			
 			// print out start-of-day header 	
-			stockQty = countStock(warehouse); 
+			
 			System.out.println("Date: " + date.toString());
-			System.out.println("Gadgets in stock: " + stockQty);
+			System.out.println("Gadgets in stock: " + countStock(warehouse));
 			
 			
 			// BEGINNING OF ORDER PROCESSING
 			// start with case where waitlist is full 
 			
-			if(waitlist.size() >= 3) {
-				System.out.println("proccessing waitlist orders");
-				
-				// first, check to make sure stock is available for waitlist order. if not, skip to tomorrow to try again 
-				if (stockQty < waitlist.peek().getGadgets()) { 
-					System.out.println("Not enough gadgets for the waitlist order, check stock tomorrow.");
-					
-				// if stock is available, fulfill waitlist order
-				} else { 
-					Order oldOrder = waitlist.poll();
-					List<Gadget> stockForOrder = new ArrayList<>();
-					while(stockForOrder.size() < oldOrder.getGadgets()) {
-						List<Gadget> pulls = new ArrayList<>();
-						pulls = warehouse.pop();
-						for (Gadget g : pulls) {
-							if (stockForOrder.size() < oldOrder.getGadgets()) {
-								stockForOrder.add(g);
-							} else {
-								break;
-							}
-						}
-						
-						if (stockForOrder.size() == oldOrder.getGadgets() && pulls.size() > (oldOrder.getGadgets() - stockForOrder.size())) {
-							List<Gadget> extraGadgets = new ArrayList<>();
-							int difference = oldOrder.getGadgets() - stockForOrder.size();
-							for (int i = 0; i < difference; i++) {
-								extraGadgets.add(pulls.get(i));
-							}
-							warehouse.push(extraGadgets);
-						}		
-					}
-					
-					if (returnEligible.size() < 3)	{				
-						returnEligible.offer(oldOrder);
-					} else {
-						returnEligible.poll();
-						returnEligible.offer(oldOrder);
-					}
-					
-					// ADD RETURNELIGIBLE LOGIC TO ALL PRODUCTION ALGORITHMS
-					
-					
-				}	
-				
-			} else {
+			if (takingOrders) { // condition where we are taking orders 
 				System.out.println("New order: ");
 				
 				// create new order for the day 
@@ -119,58 +258,86 @@ public class GadgetFactoryStore {
 				Order newOrder = new Order(numGadgets, date);
 				System.out.println(newOrder.getOrder());
 				
-				if (stockQty < newOrder.getGadgets()) {
-					System.out.println("Not enough gadgets for the order, saving it for future deliveries.");
-					waitlist.offer(newOrder);	
-				} else {
+				if (countStock(warehouse) >= newOrder.getGadgets()) {
 					List<Gadget> stockForOrder = new ArrayList<>();
-					while(stockForOrder.size() < newOrder.getGadgets()) {					
-						
+					while(stockForOrder.size() < newOrder.getGadgets()) {											
 						List<Gadget> pulls = new ArrayList<>();
 						pulls = warehouse.pop();
 						for (Gadget g : pulls) {
-							if (stockForOrder.size() < newOrder.getGadgets()) {
+							if (stockForOrder.size() < newOrder.getGadgets()) 
 								stockForOrder.add(g);
-							} else {
-								break;
-							}
+							 else 
+								break;			
 						}
-						
 						if (stockForOrder.size() == newOrder.getGadgets() && pulls.size() > (newOrder.getGadgets() - stockForOrder.size())) {
 							List<Gadget> extraGadgets = new ArrayList<>();
 							int difference = newOrder.getGadgets() - stockForOrder.size();
-							for (int i = 0; i < difference; i++) {
+							for (int i = 0; i < difference; i++) 
 								extraGadgets.add(pulls.get(i));
-							}
 							warehouse.push(extraGadgets);
 						}		
 					}
+
 					
-					if (returnEligible.size() < 3)	{				
+					
+					if (returnEligible.size() < 3)				
 						returnEligible.offer(newOrder);
-					} else {
+					 else {
 						returnEligible.poll();
 						returnEligible.offer(newOrder);
 					}
+				} else {
+					waitlist.add(newOrder);
+					if (waitlist.size() >= 3) 
+						takingOrders = false;					
 				}
 				
-				
-				
-				
-
+			} else { //condition if we are NOT taking orders 
+				if (waitlist.size() >= 1) {
+					Order currentWLOrder = waitlist.peek();
+					if (countStock(warehouse) >= currentWLOrder.getGadgets()) {
+						currentWLOrder = waitlist.poll();
+						
+						if (countStock(warehouse) >= currentWLOrder.getGadgets()) {
+							List<Gadget> stockForOrder = new ArrayList<>();
+							while(stockForOrder.size() < currentWLOrder.getGadgets()) {					
+								List<Gadget> pulls = new ArrayList<>();
+								pulls = warehouse.pop();
+								for (Gadget g : pulls) {
+									if (stockForOrder.size() < currentWLOrder.getGadgets()) 
+										stockForOrder.add(g);
+									 else 
+										break;									
+								}
+								if (stockForOrder.size() == currentWLOrder.getGadgets() && pulls.size() > (currentWLOrder.getGadgets() - stockForOrder.size())) {
+									List<Gadget> extraGadgets = new ArrayList<>();
+									int difference = currentWLOrder.getGadgets() - stockForOrder.size();
+									for (int i = 0; i < difference; i++) 
+										extraGadgets.add(pulls.get(i));								
+									warehouse.push(extraGadgets);
+								}		
+							}					
+							if (returnEligible.size() < 3)					
+								returnEligible.offer(currentWLOrder);
+							 else {
+								returnEligible.poll();
+								returnEligible.offer(currentWLOrder);
+							}
+							
+							if(waitlist.isEmpty())
+								takingOrders = true;
+							
+						}
+					} else {
+						System.out.println("Not enough gadgets, we will attempt to process tomorrow. ");
+					}
+				}
 			}
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 			
-			// make flags for regular production and waitlist production, flip to determine output for the day 
+			
+			
+			
+			
 			
 			
 			
@@ -183,13 +350,14 @@ public class GadgetFactoryStore {
 			else 
 				newMonth = false; 
 			System.out.println();
+			
+			
 		}
 
 			
 		
 		
 	}
-	
 	
 	
 	// extra method to count stock numbers 
