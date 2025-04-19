@@ -119,41 +119,42 @@ public class GadgetFactoryStore {
 				Order newOrder = new Order(numGadgets, date);
 				System.out.println(newOrder.getOrder());
 				
-				List<Gadget> stockForOrder = new ArrayList<>();
-				while(stockForOrder.size() < newOrder.getGadgets()) {
-					 if (warehouse.isEmpty()) {
-					        System.out.println("Error: warehouse ran out of batches unexpectedly.");
-					        waitlist.offer(newOrder);
-					        break; 
-					    }
-					
-					
-					List<Gadget> pulls = new ArrayList<>();
-					pulls = warehouse.pop();
-					for (Gadget g : pulls) {
-						if (stockForOrder.size() < newOrder.getGadgets()) {
-							stockForOrder.add(g);
-						} else {
-							break;
+				if (stockQty < newOrder.getGadgets()) {
+					System.out.println("Not enough gadgets for the order, saving it for future deliveries.");
+					waitlist.offer(newOrder);	
+				} else {
+					List<Gadget> stockForOrder = new ArrayList<>();
+					while(stockForOrder.size() < newOrder.getGadgets()) {					
+						
+						List<Gadget> pulls = new ArrayList<>();
+						pulls = warehouse.pop();
+						for (Gadget g : pulls) {
+							if (stockForOrder.size() < newOrder.getGadgets()) {
+								stockForOrder.add(g);
+							} else {
+								break;
+							}
 						}
+						
+						if (stockForOrder.size() == newOrder.getGadgets() && pulls.size() > (newOrder.getGadgets() - stockForOrder.size())) {
+							List<Gadget> extraGadgets = new ArrayList<>();
+							int difference = newOrder.getGadgets() - stockForOrder.size();
+							for (int i = 0; i < difference; i++) {
+								extraGadgets.add(pulls.get(i));
+							}
+							warehouse.push(extraGadgets);
+						}		
 					}
 					
-					if (stockForOrder.size() == newOrder.getGadgets() && pulls.size() > (newOrder.getGadgets() - stockForOrder.size())) {
-						List<Gadget> extraGadgets = new ArrayList<>();
-						int difference = newOrder.getGadgets() - stockForOrder.size();
-						for (int i = 0; i < difference; i++) {
-							extraGadgets.add(pulls.get(i));
-						}
-						warehouse.push(extraGadgets);
-					}		
+					if (returnEligible.size() < 3)	{				
+						returnEligible.offer(newOrder);
+					} else {
+						returnEligible.poll();
+						returnEligible.offer(newOrder);
+					}
 				}
 				
-				if (returnEligible.size() < 3)	{				
-					returnEligible.offer(newOrder);
-				} else {
-					returnEligible.poll();
-					returnEligible.offer(newOrder);
-				}
+				
 				
 				
 
