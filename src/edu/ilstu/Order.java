@@ -12,6 +12,7 @@ public class Order {
 	private int orderNumber = 0; // unique identifier to each order
 	private List<Gadget> theOrder; // list of gadgets, where the size of the list should match the number of gadgets required by the order
 	private LocalDate orderDate; // the date that the order can be fulfilled 
+	private LocalDate processingDate;
 	
 	private static int orderNumIncrementer = 1; // same idea as static int in gadget class: used to keep track of order num across ALL order instances
 	
@@ -29,10 +30,22 @@ public class Order {
 		return gadgets;
 	}
 	
+	public int getOrderNumber() {
+		return orderNumber; 
+	}
+	
 	public void fulfillOrder(List<Gadget> theOrder) {
-		for (Gadget g : theOrder) {
-			System.out.println(g.toString());
-		}
+		this.theOrder = theOrder;
+		this.processingDate = this.orderDate;
+		
+	}
+	
+	public double calcTotal(double tax) {
+		double subtotal = 0; 
+		for(Gadget g : theOrder)
+			subtotal += g.getPrice();
+		
+		return subtotal * tax; 
 	}
 	
 	public String getOrder() {
@@ -42,7 +55,7 @@ public class Order {
 	
 	public String toString() {
 		// should be called after the order has been fulfilled for the purpose of displaying the order total
-		return "";
+		return String.format("Order number:%-4d Order total:  $%.2f", orderNumber, calcTotal(GadgetFactoryStore.TAX));
 	}
 	
 	
