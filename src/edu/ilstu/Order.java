@@ -34,10 +34,17 @@ public class Order {
 		return orderNumber; 
 	}
 	
-	public void fulfillOrder(List<Gadget> theOrder) {
+	public void fulfillOrder(List<Gadget> theOrder, LocalDate today) {
 		this.theOrder = theOrder;
-		this.processingDate = this.orderDate;
-		
+		this.processingDate = today;
+	}
+	
+	public LocalDate getOrderDate() {
+		return orderDate;
+	}
+	
+	public LocalDate getProcessingDate() {
+		return processingDate;
 	}
 	
 	public double calcTotal(double tax) {

@@ -22,7 +22,7 @@ public class Gadget {
 	
 	public String toString() {
 		// returns the information in a formatted manner 
-		return "Gadget ID: " + id + "        Price: " + price;    
+		return String.format("Gadget ID:%-5d Price:$%-3d", id, price);    
 	}
 	
 	
