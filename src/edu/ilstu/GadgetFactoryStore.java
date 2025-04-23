@@ -138,25 +138,44 @@ public static void main(String[] args) {
 						System.out.println("\nStop taking new orders, waiting to process the order:");
 						Order waitlistOrder = waitlist.peek();
 						System.out.printf("                    Order number:  %d    gadgets ordered:  %d%n", waitlistOrder.getOrderNumber(), waitlistOrder.getGadgets());
-					}																				
+					}	
+					
+					if(takingOrders) {	// attempt to clear a queue order even if there is not enough stock for the newOrder
+						while(!waitlist.isEmpty() && countStock(warehouse) >= waitlist.peek().getGadgets()) {
+							Order waitlistOrder = waitlist.poll();
+							System.out.println("Processing an old order: ");
+							List<Gadget> orderStock = prepareOrder(waitlistOrder.getGadgets(), warehouse);
+							
+							waitlistOrder.fulfillOrder(orderStock, waitlistOrder.getOrderDate());
+							returnEligible.add(waitlistOrder);
+							soldThisMonth += orderStock.size();
+							salesThisMonth += waitlistOrder.calcTotal(TAX);
+							for(Gadget g : orderStock) 
+								System.out.printf("                    %s%n", g);		
+							System.out.printf("                    %s%n", waitlistOrder);
+							
+							System.out.println("\ngadgets in stock: " + countStock(warehouse));	
+							System.out.println();
+						}
+					
 				}
-				
-				if(takingOrders) {	// attempt to clear a queue order if enough stock remains after initial processing
-					while(!waitlist.isEmpty() && countStock(warehouse) >= waitlist.peek().getGadgets()) {
-						Order waitlistOrder = waitlist.poll();
-						System.out.println("Processing an old order: ");
-						List<Gadget> orderStock = prepareOrder(waitlistOrder.getGadgets(), warehouse);
-						
-						waitlistOrder.fulfillOrder(orderStock, waitlistOrder.getOrderDate());
-						returnEligible.add(waitlistOrder);
-						soldThisMonth += orderStock.size();
-						salesThisMonth += waitlistOrder.calcTotal(TAX);
-						for(Gadget g : orderStock) 
-							System.out.printf("                    %s%n", g);		
-						System.out.printf("                    %s%n", waitlistOrder);
-						
-						System.out.println("\ngadgets in stock: " + countStock(warehouse));	
-						System.out.println();
+					if(takingOrders) {	// attempt to clear a queue order if enough stock remains after initial processing
+						while(!waitlist.isEmpty() && countStock(warehouse) >= waitlist.peek().getGadgets()) {
+							Order waitlistOrder = waitlist.poll();
+							System.out.println("Processing an old order: ");
+							List<Gadget> orderStock = prepareOrder(waitlistOrder.getGadgets(), warehouse);
+							
+							waitlistOrder.fulfillOrder(orderStock, waitlistOrder.getOrderDate());
+							returnEligible.add(waitlistOrder);
+							soldThisMonth += orderStock.size();
+							salesThisMonth += waitlistOrder.calcTotal(TAX);
+							for(Gadget g : orderStock) 
+								System.out.printf("                    %s%n", g);		
+							System.out.printf("                    %s%n", waitlistOrder);
+							
+							System.out.println("\ngadgets in stock: " + countStock(warehouse));	
+							System.out.println();
+						}
 					}
 				}																		
 			} else { // condition if we are NOT taking orders (clearing the waitlist)
@@ -188,10 +207,7 @@ public static void main(String[] args) {
 					if(waitlist.isEmpty()) {
 						System.out.println("\nStart taking new orders next day.");
 	                    resumeOrders = true;
-					} else {
-						System.out.println("Not enough gadgets, we will attempt to process tomorrow. ");
-						System.out.println();
-					}
+					} 
 				}
 			}
 			
