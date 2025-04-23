@@ -158,7 +158,7 @@ public static void main(String[] args) {
 							System.out.println();
 						}
 					
-				}
+					}
 					if(takingOrders) {	// attempt to clear a queue order if enough stock remains after initial processing
 						while(!waitlist.isEmpty() && countStock(warehouse) >= waitlist.peek().getGadgets()) {
 							Order waitlistOrder = waitlist.poll();
@@ -199,8 +199,7 @@ public static void main(String[] args) {
 						System.out.printf("                    %s%n", currentWLOrder);
 
 						System.out.println("\ngadgets in stock: " + countStock(warehouse));	
-						System.out.println();
-						
+						System.out.println();			
 						
 					}
 					
@@ -210,10 +209,9 @@ public static void main(String[] args) {
 					} 
 				}
 			}
-			
-			
-			// RETURN PROCESSING 
-			if (!returnEligible.isEmpty() && rand.nextInt(5) == 0) {
+				
+			// ** returns ** 
+			if (!returnEligible.isEmpty() && rand.nextInt(5) == 0) { // 20% chance of a return happening every single day
 			    Iterator<Order> it = returnEligible.iterator();   
 			    while (it.hasNext()) {
 			        Order o = it.next();
