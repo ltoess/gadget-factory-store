@@ -60,3 +60,4 @@ The Gadget Factory Store operates with the following features:
 ## Getting Started
 
 Clone the repository and run the `GadgetFactoryStore` class to start the 100-day simulation. The program outputs daily activity logs and monthly profit summaries to the console.
+NOTE: This project was created in eclipse and won't clone well to VSCode. 
